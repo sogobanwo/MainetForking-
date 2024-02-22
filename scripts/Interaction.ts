@@ -35,8 +35,6 @@ const main = async () => {
 
     // console.log("WETH Balance:", ethers.formatUnits(wethBal, 18));
     // console.log("ETH Balance:",ethers.formatUnits(ethBal, 18));
-    console.log("USDC Balance:", ethers.formatUnits(usdcBal, 6))
-    console.log("DAI Balance:", ethers.formatUnits(daiBal, 18));
 
 
     const deadline = Math.floor(Date.now() / 1000) + (60 * 10);
@@ -50,6 +48,11 @@ const main = async () => {
     // );
     // await swap.wait()
 
+    console.log("----------------------------Transaction 1-------------------------------------")
+
+
+    console.log("USDC Balance:", ethers.formatUnits(usdcBal, 6))
+    console.log("DAI Balance:", ethers.formatUnits(daiBal, 18));
     // INTERACTION 1
     const swapTx = await ROUTER.connect(impersonatedSigner).swapExactTokensForTokensSupportingFeeOnTransferTokens(
         amountOut,
@@ -61,7 +64,28 @@ const main = async () => {
 
     await swapTx.wait();
 
+    console.log("-----------------------------------------------------------------")
+
+    const usdcBalAfterSwapTx1 = await USDC.balanceOf(impersonatedSigner.address);
+    const daiBalAfterSwapTx1 = await DAI.balanceOf(impersonatedSigner.address);
+
+    console.log("usdc balance after swap", ethers.formatUnits(usdcBalAfterSwapTx1, 6) );
+    console.log("dai balance after swap", ethers.formatUnits(daiBalAfterSwapTx1, 18) );
+
+
+    console.log("---------------------------------Transaction Ended--------------------------------")
+
+
     // INTERACTION 2
+    console.log("----------------------------Transaction 2-------------------------------------")
+
+
+    const usdcBalBeforeTx2 = await USDC.balanceOf(impersonatedSigner.address);
+    const daiBalBeforeTx2 = await DAI.balanceOf(impersonatedSigner.address);
+
+    console.log("USDC Balance:", ethers.formatUnits(usdcBalBeforeTx2, 6))
+    console.log("DAI Balance:", ethers.formatUnits(daiBalBeforeTx2, 18));
+
     const swapTXTwo = await ROUTER.connect(impersonatedSigner).swapExactETHForTokens(
         ethers.parseUnits("23",18),
         [wethAdress, DAIAddress],
@@ -71,6 +95,7 @@ const main = async () => {
     );
 
     await swapTXTwo.wait()
+    console.log("-----------------------------------------------------------------")
 
 
     // Uncomment this if you are using the swap tokens for ETH
@@ -80,7 +105,6 @@ const main = async () => {
     const usdcBalAfterSwap = await USDC.balanceOf(impersonatedSigner.address);
     const daiBalAfterSwap = await DAI.balanceOf(impersonatedSigner.address);
 
-    console.log("-----------------------------------------------------------------")
 
     // Uncomment this if you are using the swap tokens for ETH
     // console.log("weth balance before swap", ethers.formatUnits(wethBalAfterSwap, 18));
@@ -88,6 +112,8 @@ const main = async () => {
     
     console.log("usdc balance after swap", ethers.formatUnits(usdcBalAfterSwap, 6) );
     console.log("dai balance after swap", ethers.formatUnits(daiBalAfterSwap, 18) );
+
+    console.log("----------------------------Transaction Ended-------------------------------------")
 
     /*
 
